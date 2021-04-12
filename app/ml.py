@@ -1,4 +1,5 @@
 """Machine learning functions"""
+import pickle
 from pickle import load
 import requests
 from bs4 import BeautifulSoup as bs
@@ -11,6 +12,15 @@ from pypika import Query, Table, CustomFunction
 import asyncio
 from app.db import database, select, select_all
 from typing import List, Optional
+from sklearn.preprocessing import OrdinalEncoder
+import numpy as np
+from itertools import chain
+
+filename = 'rent_recommendation_model.sav'
+loaded_model = pickle.load(open(filename, 'rb'))
+ordinal_encoder = OrdinalEncoder()
+
+
 
 
 router = APIRouter()
@@ -54,7 +64,22 @@ class LivabilityWeights(BaseModel):
     low_pollution: float = 1.0
     diversity: float = 1.0
     low_crime: float = 1.0
-
+        
+        
+class Rent_Predict(BaseModel):
+    State:str
+    CountyName:str
+    Bedrooms:int
+    
+    def dict_df(self):
+        y=pd.DataFrame([dict(self)])
+        ordinal_encoder = OrdinalEncoder()
+        y[['State','CountyName']] = ordinal_encoder.fit_transform(y[['State','CountyName']])
+        return y
+         
+        
+        
+        
 
 def validate_city(
     city: City,
@@ -177,6 +202,31 @@ async def get_rental_price(city: City):
 
     return {"rental_price": value[0]}
 
+
+
+              
+@router.post("/api/rental_priceprediction")
+async def rental_price_prediction(rent_predict:Rent_Predict):
+   
+    """ Machine Learning model predicts the rental price of the target city and county
+    
+
+    args:
+        State: Provide the abbreviation of the target state. For eg NY for New York
+        CountyName: Provide the county name.
+        Bedrooms: Number of bedrroms required.
+
+    returns:
+        Dictionary that contains the requested data, which is converted
+        by fastAPI to a json object.
+    """
+    
+        
+    result = loaded_model.predict(rent_predict.dict_df()) 
+    return {'predicted_price': result[0]}         
+                        
+   
+    
 
 @router.post("/api/pollution")
 async def get_pollution(city: City):
