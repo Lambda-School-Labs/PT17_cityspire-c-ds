@@ -12,7 +12,6 @@ awsebcli = "*"
 fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 sqlalchemy = "*"
-psycopg2-binary = "*"
 requests = "*"
 bs4 = "*"
 lxml = "*"
@@ -22,8 +21,8 @@ asyncpg = "*"
 databases = {extras = ["postgresql"], version = "*"}
 sklearn = "*"
 plotly = "*"
-gunicorn = "*"
 typing-extensions = "*"
+pydantic = "*"
 
 [requires]
 python_version = "3"
