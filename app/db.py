@@ -1,5 +1,6 @@
 """Database functions"""
 
+import pandas as pd
 import os
 from fastapi import APIRouter, Depends
 import sqlalchemy
@@ -18,6 +19,12 @@ database = databases.Database(database_url)
 
 router = APIRouter()
 
+sql = "SELECT * FROM master_jobs_table"
+
+jobs_df = pd.read_sql(sql, database_url)
+
+columns = ["index", "city_state", "title", "company", "salary", "summary"]
+jobs_df['metadata'] = jobs_df[columns].to_dict(orient='records')
 
 @router.get("/info")
 async def get_url():
@@ -83,3 +90,15 @@ async def select_all(city):
     )
     value = await database.fetch_one(str(q))
     return value
+
+@router.get("/get_jobs")
+async def get_available_jobs_dict(city_state):
+    cols = ['title','company','salary','summary', 'metadata']
+    avail_jobs = jobs_df.loc[jobs_df['city_state'] == city_state, cols].head(10).to_dict(orient='records')
+    return avail_jobs
+
+@router.get("/get_jobs_count")
+async def get_jobs_count_dict(city_state):
+    cols = ['index']
+    jobs_count = jobs_df.loc[jobs_df['city_state'] == city_state, cols].count().to_dict()
+    return jobs_count
