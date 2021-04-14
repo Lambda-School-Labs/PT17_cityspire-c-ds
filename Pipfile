@@ -10,7 +10,7 @@ awsebcli = "*"
 
 [packages]
 fastapi = "*"
-uvicorn = {extras = ["standard"], version = "*"}
+uvicorn = {extras = ["standard"],version = "*"}
 sqlalchemy = "*"
 requests = "*"
 bs4 = "*"
@@ -18,11 +18,12 @@ lxml = "*"
 pypika = "*"
 pandas = "*"
 asyncpg = "*"
-databases = {extras = ["postgresql"], version = "*"}
+databases = {extras = ["postgresql"],version = "*"}
 sklearn = "*"
 plotly = "*"
 typing-extensions = "*"
 pydantic = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3"
