@@ -19,13 +19,6 @@ database = databases.Database(database_url)
 
 router = APIRouter()
 
-sql = "SELECT * FROM master_jobs_table"
-
-jobs_df = pd.read_sql(sql, database_url)
-
-columns = ["index", "city_state", "title", "company", "salary", "summary"]
-jobs_df['metadata'] = jobs_df[columns].to_dict(orient='records')
-
 @router.get("/info")
 async def get_url():
     """Verify we can connect to the database,
@@ -90,6 +83,13 @@ async def select_all(city):
     )
     value = await database.fetch_one(str(q))
     return value
+
+
+conn = "postgresql://postgres:0A96jbvaDJk%@database-cityspire-c.c2uishzxxikl.us-east-1.rds.amazonaws.com/postgres"
+sql = "SELECT * FROM master_jobs_table"
+jobs_df = pd.read_sql(sql, conn)
+columns = ["index", "city_state", "title", "company", "salary", "summary"]
+jobs_df['metadata'] = jobs_df[columns].to_dict(orient='records')
 
 @router.get("/get_jobs")
 async def get_available_jobs_dict(city_state):
