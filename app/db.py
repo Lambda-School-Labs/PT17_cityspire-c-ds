@@ -88,9 +88,8 @@ async def select_all(city):
     return value
 
 
-conn = os.getenv("CONN")
 sql = "SELECT * FROM master_jobs_table"
-jobs_df = pd.read_sql(sql, conn)
+jobs_df = pd.read_sql(sql, database_url)
 columns = ["index", "city_state", "title", "company", "salary", "summary"]
 jobs_df['metadata'] = jobs_df[columns].to_dict(orient='records')
 
