@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-from app import db, ml, viz
+from app import db, ml, viz # add with comma, other modified/copied files
 
 description = """
 MISSION: Be a one-stop resource for users to receive the most accurate city information.
@@ -26,7 +26,8 @@ app = FastAPI(
 app.include_router(db.router, tags=["Database"])
 app.include_router(ml.router, tags=["Machine Learning"])
 #app.include_router(ml.router, tags=["Rent Predictor"])
-app.include_router(viz.router, tags=["Visualization"])
+app.include_router(viz.router, tags=["Visualization"]) # add dupLIc8/modified app files hereisj
+
 
 app.add_middleware(
     CORSMiddleware,
