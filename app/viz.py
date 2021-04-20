@@ -213,3 +213,58 @@ async def air_quality_plot(current_city:City):
     fig.show()
     # fig.write_html("path/to/file.html")
     return fig.to_json()
+
+from dotenv import load_dotenv
+import nltk
+nltk.download(['punkt', 'wordnet', 'stopwords'])
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.corpus import stopwords
+import re
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud
+import os
+import sqlalchemy
+import databases
+
+load_dotenv()
+database_url = os.getenv("DATABASE_URL")
+database = databases.Database(database_url)
+
+sql = "SELECT * FROM master_jobs_table"
+jobs_df = pd.read_sql(sql, database_url)
+
+
+@router.post ("/api/jobs_wordcloud")
+async def jobs_wordcloud(city_state):
+    
+    stopwords = nltk.corpus.stopwords.words('english')
+
+    newstopwords = ['flexible', 'hours', 'job', 'parttime', 'find', 'work', 'home', 'multiple', 'shift', 'part', 'time', 'temporary', 'paid', 'today', 'interview', 'hour', 'entry', 'level']
+    stopwords.extend(newstopwords)
+
+    comment_words = ''
+
+    for val in jobs_df.base_tokens.loc[jobs_df['city_state'] == city_state]:
+        val = str(val)
+        tokens = word_tokenize(val)
+        tokens = re.sub('[^a-zA-Z 0-9]', '', val)
+        tokens = tokens.lower().split()
+        lemmatizer = WordNetLemmatizer()
+        tokens = [w for w in tokens if not w in stopwords]
+        tokens = [lemmatizer.lemmatize(w.lower().strip()) for w in tokens]
+        comment_words += " ".join(tokens) + " "
+
+    wordcloud = WordCloud(width = 800, height = 800,
+        background_color = 'white',
+        stopwords = stop_words,
+        min_font_size = 10).generate(comment_words)
+      
+    plt.figure(figsize = (10, 10), facecolor = None)
+    plt.imshow(wordcloud)
+    plt.axis("off")
+    plt.tight_layout(pad=0)
+    plt.show()
+    
+    return plt.show();
