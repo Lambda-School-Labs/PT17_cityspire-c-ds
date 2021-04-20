@@ -13,12 +13,12 @@ from pypika.terms import Field
 
 Field_ = Union[Field, str]
 
-load_dotenv()
-database_url = os.getenv("DATABASE_URL")
-database = databases.Database(database_url)
-
-# database_url = "postgresql://DBCITYG:FLc3wX793XwzdEK@cityspire-g.c2uishzxxikl.us-east-1.rds.amazonaws.com/postgres"
+# load_dotenv()
+# database_url = os.getenv("DATABASE_URL")
 # database = databases.Database(database_url)
+
+database_url = "postgresql://DBCITYG:FLc3wX793XwzdEK@cityspire-g.c2uishzxxikl.us-east-1.rds.amazonaws.com/postgres"
+database = databases.Database(database_url)
 
 router = APIRouter()
 
