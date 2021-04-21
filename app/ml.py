@@ -1,6 +1,5 @@
 """Machine learning functions"""
 import pickle
-from pickle import load
 import requests
 from bs4 import BeautifulSoup as bs
 from fastapi import APIRouter, HTTPException, Depends
@@ -16,7 +15,7 @@ from sklearn.preprocessing import OrdinalEncoder
 import numpy as np
 from itertools import chain
 
-filename = 'PT17_cityspire-c-ds/rent_recommendation_model.sav'
+filename = 'app/rent_recommendation_model.sav'
 loaded_model = pickle.load(open(filename, 'rb'))
 ordinal_encoder = OrdinalEncoder()
 
