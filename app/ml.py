@@ -16,7 +16,8 @@ from sklearn.preprocessing import OrdinalEncoder
 import numpy as np
 from itertools import chain
 
-filename = 'rent_recommendation_model.sav'
+# filename = 'rent_recommendation_model.sav'
+filename = 'https://github.com/Lambda-School-Labs/PT17_cityspire-c-ds/blob/final_deploy/aws_eb_ec2/rent_recommendation_model.sav'
 loaded_model = pickle.load(open(filename, 'rb'))
 ordinal_encoder = OrdinalEncoder()
 
