@@ -23,6 +23,7 @@ sklearn = "*"
 plotly = "*"
 typing-extensions = "*"
 pydantic = "*"
+psycopg2-binary = "*"
 
 [requires]
 python_version = "3"
