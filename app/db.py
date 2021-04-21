@@ -17,14 +17,10 @@ load_dotenv()
 database_url = os.getenv("DATABASE_URL")
 database = databases.Database(database_url)
 
+# database_url = "postgresql://DBCITYG:FLc3wX793XwzdEK@cityspire-g.c2uishzxxikl.us-east-1.rds.amazonaws.com/postgres"
+# database = databases.Database(database_url)
+
 router = APIRouter()
-
-sql = "SELECT * FROM master_jobs_table"
-
-jobs_df = pd.read_sql(sql, database_url)
-
-columns = ["index", "city_state", "title", "company", "salary", "summary"]
-jobs_df['metadata'] = jobs_df[columns].to_dict(orient='records')
 
 @router.get("/info")
 async def get_url():
@@ -90,6 +86,12 @@ async def select_all(city):
     )
     value = await database.fetch_one(str(q))
     return value
+
+
+sql = "SELECT * FROM master_jobs_table"
+jobs_df = pd.read_sql(sql, database_url)
+columns = ["index", "city_state", "title", "company", "salary", "summary"]
+jobs_df['metadata'] = jobs_df[columns].to_dict(orient='records')
 
 @router.get("/get_jobs")
 async def get_available_jobs_dict(city_state):
