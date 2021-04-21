@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 from dotenv import load_dotenv
 import os
 
+'''
 load_dotenv()
 db = os.getenv('DATABASE_URL')
 
@@ -17,11 +18,32 @@ engine = create_engine(db)
 
 df3.to_sql('data', con=db, if_exists='replace') #last param if loading to the DB, not if trying to pull form it
 
+from sqlalchemy import create_engine
+from dotenv import load_dotenv
+import os
+import pandas as pd
+'''
+
+load_dotenv()
+
+db = os.getenv('DATABASE_URL')
+
+# df3 = pd.read_csv('https://github.com/Lambda-School-Labs/PT17_cityspire-c-ds/blob/main/notebooks/datasets/data/crime_data/fbi_crime_uscities.csv')
+df3 = pd.read_csv('fbi_crime_uscities.csv') # was above, reconfigured to use in df3.rename.. below
+
+df3 = df3.rename({'Crime Rate (per 1000 residents)': 'Crime Rate per 1000'}, axis=1)
+
+df3.columns
+
+engine = create_engine(db) # for SQL
+
+df3.to_sql('data', con=db, if_exists='replace') 
+
 df3['Good Days']
 
 livability = df3[['City', 'State', 'Rent', 'Good Days', 'Crime Rate per 1000']] # new df called livability
 
-livability['Rent'] = livability['Rent'] * -1
+livability['Rent'] = livability['Rent'] * -1 # bc higher rent, crime are undesireable
 
 livability['Crime Rate per 1000'] = livability['Crime Rate per 1000'] * -1
 
@@ -48,9 +70,19 @@ with open('../app/livability_scaler.pkl', 'rb') as f:
 s.transform(livability.drop(['City', 'State'], 1).iloc[0,:].to_numpy().reshape(1, -1))
 
 '''
-From Ike Mar 22, 2021 9:45PM in Lambda School Workspace labspt_ds channel, pinned by Jeffrey Asuncion:
+# From Ike Mar 22, 2021 9:45PM in Lambda School Workspace labspt_ds channel, pinned by Jeffrey Asuncion:
 
-Come up with a way to calculate a (composite score) livability score for each locale : the codebase already has a livability score and you're expected to either recalculate based on the new features you'll add or come with a completely new way to calculate it (livability score is a composite score)
+# Come up with a way to calculate a (composite score) livability score for each locale : the codebase already 
+# has a livability score and you're expected to either recalculate based on the new features you'll add or come 
+# with a completely new way to calculate it (livability score is a composite score)
+
+# --
+
+# From: PT17 Product Roadmaps 
+# Livability score - this would be some type of composite score that the team will come up with. The scoring formula 
+# could utilize data like cost of living index, walk score, crime stats, The user should have the ability to set thresholds.
+# https://www.notion.so/CitySpire-9134a15c1cc3481e87f8d121f7ef3843
+
 '''
 
 # import math, numpy
