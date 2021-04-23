@@ -24,6 +24,7 @@ typing-extensions = "*"
 pydantic = "*"
 psycopg2-binary = "*"
 sqlalchemy = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3"
