@@ -23,7 +23,7 @@ Use data to find a place right for you to live.
 
 
 ### DS ENDPOINTS
-http://cityscape-203.eba-ijacxhm2.us-east-1.elasticbeanstalk.com/
+http://ec2-35-153-93-234.compute-1.amazonaws.com:8000/
 
 #### Database
 * /api/info
